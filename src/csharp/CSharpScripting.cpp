@@ -5,23 +5,36 @@
 #include <mono/metadata/assembly.h>
 #include <mono/metadata/debug-helpers.h>
 
+MonoDomain* domain = nullptr;
+MonoImage* image = nullptr;
 
 // Init Mono runtime
 void CSharpScripting::InitMono()
 {
-    // TODO: Add your implementation code here.
+    // Load domain, assembly and image.
+    domain = mono_jit_init("CSDomain");
+
+    MonoAssembly* assembly = mono_domain_assembly_open(domain, "Game.dll"); // Temporary, will move
+    image = mono_assembly_get_image(assembly);
 }
 
 
-// Cleanup Mono runtime
+// Shuts down the Mono runtime and cleans everything
 void CSharpScripting::CleanupMono()
 {
-    // TODO: Add your implementation code here.
+    mono_jit_cleanup(domain); 
 }
 
 // Run a C# method
-// Example: RunCSharpMethod(NameSpace.Class::Method)
 void CSharpScripting::RunCSharpMethod(std::string method)
 {
-    // TODO: Add your implementation code here.
+    MonoMethodDesc* methodDesc = mono_method_desc_new(method.c_str(), false);
+    MonoMethod* monoMethod = mono_method_desc_search_in_image(methodDesc, image); // Finds the method from the description in the load C# image
+    mono_method_desc_free(methodDesc); // Cleans up the method description object (no longer needed once the method is found)
+
+    if (monoMethod)
+    {
+        mono_runtime_invoke(monoMethod, nullptr, nullptr, nullptr); // Calls the method
+    }
 }
+
