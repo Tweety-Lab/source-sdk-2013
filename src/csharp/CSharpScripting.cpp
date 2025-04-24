@@ -4,90 +4,100 @@
 #include <mono/jit/jit.h>
 #include <mono/metadata/assembly.h>
 #include <mono/metadata/debug-helpers.h>
-
 #include "Filesystem.h"
 
-MonoDomain* domain = nullptr;
-MonoImage* image = nullptr;
+// Static variables
+static MonoDomain* s_pDomain = nullptr;
+static MonoImage* s_pImage = nullptr;
 
-// Init Mono runtime
+// Initialize Mono runtime
 void CSharpScripting::InitMono()
 {
-    // Get game.dll path from source filesystem
+    // Get game.dll path from filesystem
     char fsAssemblyPath[MAX_PATH];
     filesystem->RelativePathToFullPath("bin/x64/Game.dll", "GAME", fsAssemblyPath, sizeof(fsAssemblyPath));
 
-    // Get Mono Lib path from source filesystem
-	char fsMonoLibPath[MAX_PATH];
-	filesystem->RelativePathToFullPath("../../src/thirdparty/mono/lib", "GAME", fsMonoLibPath, sizeof(fsMonoLibPath));
+    // Get Mono library path from filesystem
+    char fsMonoLibPath[MAX_PATH];
+    filesystem->RelativePathToFullPath("../../src/thirdparty/mono/lib", "GAME", fsMonoLibPath, sizeof(fsMonoLibPath));
 
-	// Get Mono etc path from source filesystem
-	char fsMonoEtcPath[MAX_PATH];
-	filesystem->RelativePathToFullPath("../../src/thirdparty/mono/etc", "GAME", fsMonoEtcPath, sizeof(fsMonoEtcPath));
+    // Get Mono etc path from filesystem
+    char fsMonoEtcPath[MAX_PATH];
+    filesystem->RelativePathToFullPath("../../src/thirdparty/mono/etc", "GAME", fsMonoEtcPath, sizeof(fsMonoEtcPath));
 
-
-    // Set Mono dirs
+    // Set Mono directories
     mono_set_dirs(fsMonoLibPath, fsMonoEtcPath);
 
-    // Initialize mono with domain, assembly and image
-	domain = mono_jit_init("Domain");
-
-    MonoAssembly* assembly = mono_domain_assembly_open(domain, fsAssemblyPath); // Temporary, will move
-
-    // Check if assembly was valid
-    if (assembly == nullptr) 
+    // Initialize Mono domain
+    s_pDomain = mono_jit_init("SourceDomain");
+    if (!s_pDomain)
     {
-		DevWarning("[C#] Failed to load assembly: 'Game.dll'\n");
-		return;
+        DevWarning("[C#] Failed to initialize Mono domain\n");
+        return;
     }
 
-    image = mono_assembly_get_image(assembly);
+    // Load assembly
+    MonoAssembly* pAssembly = mono_domain_assembly_open(s_pDomain, fsAssemblyPath);
+    if (!pAssembly)
+    {
+        DevWarning("[C#] Failed to load assembly: 'Game.dll'\n");
+        return;
+    }
 
-    // Print to Console
-	DevMsg("[C#] Mono domain initialized.\n");
+    s_pImage = mono_assembly_get_image(pAssembly);
+    DevMsg("[C#] Mono domain initialized successfully\n");
 }
 
-// Shuts down the Mono runtime and cleans everything
+// Shut down the Mono runtime and clean up resources
 void CSharpScripting::CleanupMono()
 {
-    // Cleanup domain only if null
-    if (domain != nullptr) {
-        mono_jit_cleanup(domain);
-        domain = nullptr;
+    if (s_pImage)
+    {
+        mono_image_close(s_pImage);
+        s_pImage = nullptr;
     }
 
-    // Cleanup image only if null
-	if (image != nullptr) {
-		mono_image_close(image);
-		image = nullptr;
-	}
+    if (s_pDomain)
+    {
+        mono_jit_cleanup(s_pDomain);
+        s_pDomain = nullptr;
+    }
 }
 
-// Run a C# method
-void CSharpScripting::RunCSharpMethod(std::string method)
+// Execute a C# method
+void CSharpScripting::RunCSharpMethod(const std::string& methodName)
 {
-    MonoMethodDesc* methodDesc = mono_method_desc_new(method.c_str(), false);
-    MonoMethod* monoMethod = mono_method_desc_search_in_image(methodDesc, image); // Finds the method from the description in the load C# image
-    mono_method_desc_free(methodDesc); // Cleans up the method description object (no longer needed once the method is found)
-
-    if (monoMethod)
+    if (!s_pImage)
     {
-        // Run method and catch any exceptions
-        MonoObject* exception = nullptr;
-        MonoObject* result = mono_runtime_invoke(monoMethod, nullptr, nullptr, &exception);
+        DevWarning("[C#] No loaded assembly image\n");
+        return;
+    }
 
-        if (exception)
-        {
-            MonoString* exStr = mono_object_to_string(exception, nullptr);
-            char* msg = mono_string_to_utf8(exStr);
-            DevWarning("[C# Exception] %s\n", msg);
-            mono_free(msg);
-        }
-	}
-    else
+    MonoMethodDesc* pMethodDesc = mono_method_desc_new(methodName.c_str(), false);
+    if (!pMethodDesc)
     {
-		// Method not found
-        DevWarning("[C#] Failed to find method: '%s'\n", method.c_str());
+        DevWarning("[C#] Failed to create method description for: '%s'\n", methodName.c_str());
+        return;
+    }
+
+    MonoMethod* pMethod = mono_method_desc_search_in_image(pMethodDesc, s_pImage);
+    mono_method_desc_free(pMethodDesc);
+
+    if (!pMethod)
+    {
+        DevWarning("[C#] Method not found: '%s'\n", methodName.c_str());
+        return;
+    }
+
+    // Invoke the method and handle exceptions
+    MonoObject* pException = nullptr;
+    mono_runtime_invoke(pMethod, nullptr, nullptr, &pException);
+
+    if (pException)
+    {
+        MonoString* pExStr = mono_object_to_string(pException, nullptr);
+        char* szMsg = mono_string_to_utf8(pExStr);
+        DevWarning("[C# Exception] %s\n", szMsg);
+        mono_free(szMsg);
     }
 }
-
