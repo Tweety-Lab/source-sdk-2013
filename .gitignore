@@ -7,7 +7,6 @@ mod_tf_win64.exe
 # Visual Studio 
 *.suo
 *.user
-*.sln.docstates
 *.obj
 *.pch
 *.tlog
@@ -61,7 +60,6 @@ config.cfg
 *.h.gch
 *.h.gch.d
 
-*.sln
 *.slnx
 *.vcproj
 *.vcxproj
