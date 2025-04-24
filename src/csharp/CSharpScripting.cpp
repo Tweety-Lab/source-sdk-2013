@@ -11,10 +11,21 @@ MonoImage* image = nullptr;
 // Init Mono runtime
 void CSharpScripting::InitMono()
 {
-    // Load domain, assembly and image.
-    domain = mono_jit_init("CSDomain");
+    // Set Mono dirs
+    mono_set_dirs("D:\\NewSource\\source-sdk-2013\\game\\mod_hl2mp\\src\\thirdparty\\mono\\lib", "D:\\NewSource\\source-sdk-2013\\game\\mod_hl2mp\\src\\thirdparty\\mono\\etc");
 
-    MonoAssembly* assembly = mono_domain_assembly_open(domain, "Game.dll"); // Temporary, will move
+    // Initialize mono with domain, assembly and image
+	domain = mono_jit_init("Domain");
+
+    MonoAssembly* assembly = mono_domain_assembly_open(domain, "D:\\NewSource\\source-sdk-2013\\game\\mod_hl2mp\\game\\mod_hl2mp\\bin\\x64\\Game.dll"); // Temporary, will move
+
+    // Check if assembly was valid
+    if (assembly == nullptr) 
+    {
+		DevWarning("[C#] Failed to load assembly: 'Game.dll'\n");
+		return;
+    }
+
     image = mono_assembly_get_image(assembly);
 
     // Print to Console
@@ -48,6 +59,10 @@ void CSharpScripting::RunCSharpMethod(std::string method)
     if (monoMethod)
     {
         mono_runtime_invoke(monoMethod, nullptr, nullptr, nullptr); // Calls the method
+	}
+    else
+    {
+        DevWarning("[C#] Failed to find method: '%s'\n", method.c_str());
     }
 }
 

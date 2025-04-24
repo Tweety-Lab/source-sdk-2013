@@ -151,6 +151,9 @@
 
 #endif
 
+// Mono
+#include "CSharpScripting.h"
+
 extern vgui::IInputInternal *g_InputInternal;
 
 //=============================================================================
@@ -1115,6 +1118,11 @@ int CHLClient::Init( CreateInterfaceFn appSystemFactory, CreateInterfaceFn physi
 	{
 		RegisterSecureLaunchProcessFunc( pfnUnsafeCmdLineProcessor );
 	}
+
+	// Mono
+	CSharpScripting::InitMono();
+
+	CSharpScripting::RunCSharpMethod("Game.Test:PrintMessage");
 
 	return true;
 }

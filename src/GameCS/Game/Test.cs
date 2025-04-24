@@ -1,10 +1,12 @@
-﻿namespace Game
+﻿using System;
+
+namespace Game
 {
     public static class Test
     {
-        public static void TestMethod()
+        public static void PrintMessage()
         {
-            Console.WriteLine("Test Func called from C#!");
+            Console.WriteLine("Hello World from C#!");
         }
     }
 }
