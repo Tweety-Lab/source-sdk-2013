@@ -5,19 +5,34 @@
 #include <mono/metadata/assembly.h>
 #include <mono/metadata/debug-helpers.h>
 
+#include "Filesystem.h"
+
 MonoDomain* domain = nullptr;
 MonoImage* image = nullptr;
 
 // Init Mono runtime
 void CSharpScripting::InitMono()
 {
+    // Get game.dll path from source filesystem
+    char fsAssemblyPath[MAX_PATH];
+    filesystem->RelativePathToFullPath("bin/x64/Game.dll", "GAME", fsAssemblyPath, sizeof(fsAssemblyPath));
+
+    // Get Mono Lib path from source filesystem
+	char fsMonoLibPath[MAX_PATH];
+	filesystem->RelativePathToFullPath("../../src/thirdparty/mono/lib", "GAME", fsMonoLibPath, sizeof(fsMonoLibPath));
+
+	// Get Mono etc path from source filesystem
+	char fsMonoEtcPath[MAX_PATH];
+	filesystem->RelativePathToFullPath("../../src/thirdparty/mono/etc", "GAME", fsMonoEtcPath, sizeof(fsMonoEtcPath));
+
+
     // Set Mono dirs
-    mono_set_dirs("D:\\NewSource\\source-sdk-2013\\game\\mod_hl2mp\\src\\thirdparty\\mono\\lib", "D:\\NewSource\\source-sdk-2013\\game\\mod_hl2mp\\src\\thirdparty\\mono\\etc");
+    mono_set_dirs(fsMonoLibPath, fsMonoEtcPath);
 
     // Initialize mono with domain, assembly and image
 	domain = mono_jit_init("Domain");
 
-    MonoAssembly* assembly = mono_domain_assembly_open(domain, "D:\\NewSource\\source-sdk-2013\\game\\mod_hl2mp\\game\\mod_hl2mp\\bin\\x64\\Game.dll"); // Temporary, will move
+    MonoAssembly* assembly = mono_domain_assembly_open(domain, fsAssemblyPath); // Temporary, will move
 
     // Check if assembly was valid
     if (assembly == nullptr) 
@@ -29,7 +44,7 @@ void CSharpScripting::InitMono()
     image = mono_assembly_get_image(assembly);
 
     // Print to Console
-	DevMsg("Mono domain initialized.\n");
+	DevMsg("[C#] Mono domain initialized.\n");
 }
 
 // Shuts down the Mono runtime and cleans everything
