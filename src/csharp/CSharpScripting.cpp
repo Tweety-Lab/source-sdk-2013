@@ -32,7 +32,6 @@ void CSharpScripting::InitMono()
 	DevMsg("Mono domain initialized.\n");
 }
 
-
 // Shuts down the Mono runtime and cleans everything
 void CSharpScripting::CleanupMono()
 {
@@ -58,10 +57,21 @@ void CSharpScripting::RunCSharpMethod(std::string method)
 
     if (monoMethod)
     {
-        mono_runtime_invoke(monoMethod, nullptr, nullptr, nullptr); // Calls the method
+        // Run method and catch any exceptions
+        MonoObject* exception = nullptr;
+        MonoObject* result = mono_runtime_invoke(monoMethod, nullptr, nullptr, &exception);
+
+        if (exception)
+        {
+            MonoString* exStr = mono_object_to_string(exception, nullptr);
+            char* msg = mono_string_to_utf8(exStr);
+            DevWarning("[C# Exception] %s\n", msg);
+            mono_free(msg);
+        }
 	}
     else
     {
+		// Method not found
         DevWarning("[C#] Failed to find method: '%s'\n", method.c_str());
     }
 }

@@ -6,7 +6,7 @@ namespace Game
     {
         public static void PrintMessage()
         {
-            Console.WriteLine("Hello World from C#!");
+            Console.WriteLine("Hello, World!");
         }
     }
 }
