@@ -504,3 +504,15 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Ignore build outputs for C# project
+/src/GameCS/Game/bin/
+/src/GameCS/Game/obj/
+
+# Ignore Rider or VSCode-specific files
+/src/GameCS/Game/.vs/
+/src/GameCS/Game/.vscode/
+
+# Do NOT ignore C# solution and project files
+!src/GameCS/Game/*.sln
+!src/GameCS/Game/*.csproj
