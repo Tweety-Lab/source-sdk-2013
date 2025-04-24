@@ -5,7 +5,6 @@ mod_hl2mp_win64.exe
 mod_tf_win64.exe
 
 # Visual Studio
-*.sln 
 *.suo
 *.user
 *.obj
