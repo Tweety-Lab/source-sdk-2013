@@ -16,13 +16,26 @@ void CSharpScripting::InitMono()
 
     MonoAssembly* assembly = mono_domain_assembly_open(domain, "Game.dll"); // Temporary, will move
     image = mono_assembly_get_image(assembly);
+
+    // Print to Console
+	DevMsg("Mono domain initialized.\n");
 }
 
 
 // Shuts down the Mono runtime and cleans everything
 void CSharpScripting::CleanupMono()
 {
-    mono_jit_cleanup(domain); 
+    // Cleanup domain only if null
+    if (domain != nullptr) {
+        mono_jit_cleanup(domain);
+        domain = nullptr;
+    }
+
+    // Cleanup image only if null
+	if (image != nullptr) {
+		mono_image_close(image);
+		image = nullptr;
+	}
 }
 
 // Run a C# method

@@ -87,6 +87,7 @@
 #include "ihudlcd.h"
 #include "toolframework_client.h"
 #include "hltvcamera.h"
+
 #if defined( REPLAY_ENABLED )
 #include "replay/replaycamera.h"
 #include "replay/replay_ragdoll.h"
@@ -149,7 +150,6 @@
 #include "econ/tool_items/custom_texture_cache.h"
 
 #endif
-
 
 extern vgui::IInputInternal *g_InputInternal;
 
