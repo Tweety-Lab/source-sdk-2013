@@ -18,10 +18,10 @@ $Configuration
 		$PreprocessorDefinitions			"$BASE;HL2MP;HL2_CLIENT_DLL;NEXT_BOT"
 	}
 
+	// MONO
 	$Linker
 	{
-		$AdditionalDependencies	"mono-2.0-sgen.lib"
-
+		$AdditionalDependencies "mono-2.0-sgen.lib user32.lib shell32.lib"
 		$AdditionalLibraryDirectories	"$SRCDIR\thirdparty\mono\lib"
 	}
 }
