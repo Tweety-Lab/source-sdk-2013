@@ -42,6 +42,12 @@ $Project "Client (HL2MP)"
 		$File	"$SRCDIR\game\shared\teamplay_round_timer.cpp"
 		$File	"$SRCDIR\game\shared\teamplay_round_timer.h"
 
+		$Folder "CSharp" 
+		{
+			$File	"$SRCDIR\csharp\CSharpScripting.cpp"
+			$File	"$SRCDIR\csharp\CSharpScripting.h"
+		}
+
 		$Folder	"NextBot"
 		{
 			$File	"NextBot\C_NextBot.cpp"
