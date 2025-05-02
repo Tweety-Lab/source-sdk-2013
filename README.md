@@ -1,5 +1,5 @@
 # Source-CSharp
-*Source SDK 2013 With C# Scripting support via .NET.*
+*Source SDK 2013 With C# Scripting support via .NET 9.0.0.*
 
 If you have any questions or need any help feel free to contact me via email (`adam.g@tweety-lab.dev`) or on discord (`tweety333`).
 
