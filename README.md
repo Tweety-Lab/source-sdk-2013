@@ -1,14 +1,14 @@
 # Source-CSharp
 *Source SDK 2013 With C# Scripting support via .NET.*
 
+If you have any questions or need any help feel free to contact me via email (`adam.g@tweety-lab.dev`) or on discord (`tweety333`).
+
 ## C# Features
 - Networked Entity Support
 - Interaction with Source's File System
 - Cleaned up API
 - Input Support
 - Bindable Game Events (OnDeath, OnMapChange, etc)
-
-
 
 ## C# Project Structure
 C# Support adds a lot of new folders and files, each with their own conventions. Some of them are as follows:
@@ -18,6 +18,29 @@ Stored in `Client OR Server/Source Files/CSharp/Bridge/`. This is where all the 
 
 ### C# Bindings
 The C# solution `src/CSharp/Engine/Engine.sln` provides all the abstractions for interacting with Engine code from C#. Inside of the solution the imports are stored in `Bridge/` and often mirror the folder structure of the C++ bindings its importing. Bridge classes should ALWAYS be marked as `internal` to prevent users accessing the low level engine imports.
+
+## Integrating C# Support in your own SDK
+1. Add the `src/CSharp` and `src/game/shared/csharp` folders to your SDK.
+2. In your `client_game.vpc` and `server_game.vpc` files add the following line: `$Include "$SRCDIR\game\shared\csharp\csharp.vpc"`
+3. Open your game's `gameinterface.cpp` file and add the following code to the end of `CServerGameDLL::GameInit`:
+```CSharp
+	// If we haven't already, initialize the C# scripting system
+	if (!CSharpScripting::IsInitialized) 
+	{
+		// Initialize C# with .NET
+		CSharpScripting::Initialize<DotNetHostBackend>();
+
+		// Run the C# Engine load method
+		CSharpScripting::RunCSharpMethod("SourceEngine.SourceEngine:Load");
+
+		// Register C# Entity factories (DO THIS LAST)
+		// This allows entities defined in C# to be spawned from their name
+		CSharpScripting::RegisterCSharpEntityFactories();
+	}
+```
+5. Follow the steps in **Build Instructions**
+6. Enjoy!
+
 
 ## Build Instructions
 
