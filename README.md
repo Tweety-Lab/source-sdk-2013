@@ -1,10 +1,14 @@
-# Source SDK 2013
+# Source-CSharp
+*Source SDK 2013 With C# Scripting support via .NET.*
 
-Source code for Source SDK 2013.
+## C# Features
+- Networked Entity Support
+- Interaction with Source's File System
+- Cleaned up API
+- Input Support
+- Bindable Game Events (OnDeath, OnMapChange, etc)
 
-Contains the game code for Half-Life 2, HL2: DM and TF2.
 
-**Now including Team Fortress 2! ✨**
 
 ## C# Project Structure
 C# Support adds a lot of new folders and files, each with their own conventions. Some of them are as follows:
