@@ -11,6 +11,9 @@ $Macro GAMENAME 	"mod_hl2mp" [$SOURCESDK]
 $Include "$SRCDIR\game\server\server_base.vpc"
 $Include "$SRCDIR\game\server\nav_mesh.vpc"
 
+// C#
+$Include "$SRCDIR\game\shared\csharp\csharp.vpc"
+
 $Configuration
 {
 	$Compiler

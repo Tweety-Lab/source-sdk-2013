@@ -1,0 +1,75 @@
+$Configuration
+{
+	$Compiler
+	{
+		$AdditionalIncludeDirectories		"$BASE;$SRCDIR\game\shared\csharp,$SRCDIR\thirdparty\dotnet"
+	}
+
+	// .NET
+	$Linker
+	{
+		$AdditionalDependencies 			"$BASE;nethost.lib"
+		$AdditionalLibraryDirectories		"$BASE;$SRCDIR\thirdparty\dotnet"
+	}
+}
+
+$Project
+{
+    $Folder	"Source Files"
+	{
+        $Folder "CSharp" 
+		{
+			$File	"$SRCDIR\game\shared\csharp\CSharpEntityFactory.cpp"
+			$File	"$SRCDIR\game\shared\csharp\CSharpEntityFactory.h"
+			$Folder "Scripting" 
+			{
+				$Folder "DotNet" 
+				{
+					$File	"$SRCDIR\game\shared\csharp\scripting\dotnet\DotNetScriptingBackend.h"
+					$File	"$SRCDIR\game\shared\csharp\scripting\dotnet\DotNetScriptingBackend.cpp"
+				}
+				$File	"$SRCDIR\game\shared\csharp\scripting\CSharpScripting.h"
+				$File	"$SRCDIR\game\shared\csharp\scripting\CSharpScripting.cpp"
+				$File	"$SRCDIR\game\shared\csharp\scripting\IScriptingBackend.h"
+			}
+			$Folder "Bridge" 
+			{
+				$Folder "Console" 
+				{
+					$File	"$SRCDIR\game\shared\csharp\bridge\console\ConsoleExports.cpp"
+					$File	"$SRCDIR\game\shared\csharp\bridge\console\ConsoleExports.h"
+				}
+				$Folder "FileSystem" 
+				{
+					$File	"$SRCDIR\game\shared\csharp\bridge\filesystem\FileSystemExports.cpp"
+					$File	"$SRCDIR\game\shared\csharp\bridge\filesystem\FileSystemExports.h"
+				}
+				$Folder "Entities" 
+				{
+					$File	"$SRCDIR\game\shared\csharp\bridge\entities\EntityExports.cpp"
+					$File	"$SRCDIR\game\shared\csharp\bridge\entities\EntityExports.h"
+				}
+				$Folder "Events" 
+				{
+					$File	"$SRCDIR\game\shared\csharp\bridge\events\GameEvents.cpp"
+					$File	"$SRCDIR\game\shared\csharp\bridge\events\GameEvents.h"
+				}
+				$Folder "Networking" 
+				{
+					$File	"$SRCDIR\game\shared\csharp\bridge\networking\NetworkingExports.cpp"
+					$File	"$SRCDIR\game\shared\csharp\bridge\networking\NetworkingExports.h"
+				}
+				$Folder "Input" 
+				{
+					$File	"$SRCDIR\game\shared\csharp\bridge\input\InputExports.cpp"
+					$File	"$SRCDIR\game\shared\csharp\bridge\input\InputExports.h"
+				}
+			}
+			$Folder "Wrappers" 
+			{
+				$File	"$SRCDIR\game\shared\csharp\wrappers\CSharpEntityWrapper.cpp"
+				$File	"$SRCDIR\game\shared\csharp\wrappers\CSharpEntityWrapper.h"
+			}
+		}
+    }
+}

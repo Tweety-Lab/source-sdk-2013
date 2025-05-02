@@ -10,19 +10,15 @@ $Macro GAMENAME 	"mod_hl2mp" [$SOURCESDK]
 
 $Include "$SRCDIR\game\client\client_base.vpc"
 
+// C#
+$Include "$SRCDIR\game\shared\csharp\csharp.vpc"
+
 $Configuration
 {
 	$Compiler
 	{
-		$AdditionalIncludeDirectories		"$BASE;hl2mp\ui,.\hl2mp,$SRCDIR\game\shared\hl2mp,.\hl2,.\hl2\elements,$SRCDIR\game\shared\hl2,$SRCDIR\thirdparty\mono\include\mono-2.0,$SRCDIR\csharp"
+		$AdditionalIncludeDirectories		"$BASE;hl2mp\ui,.\hl2mp,$SRCDIR\game\shared\hl2mp,.\hl2,.\hl2\elements,$SRCDIR\game\shared\hl2"
 		$PreprocessorDefinitions			"$BASE;HL2MP;HL2_CLIENT_DLL;NEXT_BOT"
-	}
-
-	// MONO
-	$Linker
-	{
-		$AdditionalDependencies "mono-2.0-sgen.lib user32.lib shell32.lib"
-		$AdditionalLibraryDirectories	"$SRCDIR\thirdparty\mono\lib"
 	}
 }
 
@@ -41,12 +37,6 @@ $Project "Client (HL2MP)"
 		$File	"$SRCDIR\game\shared\predicted_viewmodel.h"
 		$File	"$SRCDIR\game\shared\teamplay_round_timer.cpp"
 		$File	"$SRCDIR\game\shared\teamplay_round_timer.h"
-
-		$Folder "CSharp" 
-		{
-			$File	"$SRCDIR\csharp\CSharpScripting.cpp"
-			$File	"$SRCDIR\csharp\CSharpScripting.h"
-		}
 
 		$Folder	"NextBot"
 		{

@@ -129,6 +129,10 @@ extern ConVar tf_mm_servermode;
 #include "replay/ireplaysystem.h"
 #endif
 
+// C#
+#include "scripting/CSharpScripting.h"
+#include "scripting/dotnet/DotNetScriptingBackend.h"
+
 extern IToolFrameworkServer *g_pToolFrameworkServer;
 extern IParticleSystemQuery *g_pParticleSystemQuery;
 
@@ -863,6 +867,20 @@ bool CServerGameDLL::GameInit( void )
 	if ( event )
 	{
 		gameeventmanager->FireEvent( event );
+	}
+
+	// If we haven't already, initialize the C# scripting system
+	if (!CSharpScripting::IsInitialized)
+	{
+		// Initialize C# with .NET
+		CSharpScripting::Initialize<DotNetHostBackend>();
+
+		// Run the C# Engine load method
+		CSharpScripting::RunCSharpMethod("SourceEngine.SourceEngine:Load");
+
+		// Register C# Entity factories (DO THIS LAST)
+		// This allows entities defined in C# to be spawned from their name
+		CSharpScripting::RegisterCSharpEntityFactories();
 	}
 
 	return true;
