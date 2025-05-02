@@ -56,6 +56,8 @@ The C# solution `src/CSharp/Engine/Engine.sln` provides all the abstractions for
 
 ### Linux
 
+C# Has not been tested on Linux.
+
 Requirements:
  - Source SDK 2013 Multiplayer installed via Steam
  - podman
