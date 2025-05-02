@@ -1,40 +1,62 @@
-# Source SDK 2013
+# Source-CSharp
+*Source SDK 2013 With C# Scripting support via .NET.*
 
-Source code for Source SDK 2013.
+## C# Features
+- Networked Entity Support
+- Interaction with Source's File System
+- Cleaned up API
+- Input Support
+- Bindable Game Events (OnDeath, OnMapChange, etc)
 
-Contains the game code for Half-Life 2, HL2: DM and TF2.
 
-**Now including Team Fortress 2! ✨**
 
-## Build instructions
+## C# Project Structure
+C# Support adds a lot of new folders and files, each with their own conventions. Some of them are as follows:
 
-Clone the repository using the following command:
+### C++ Bindings
+Stored in `Client OR Server/Source Files/CSharp/Bridge/`. This is where all the C++ Code that gets called by C# is stored. Files made in here should be appended with "Exports" to make their function clear.
 
-`git clone https://github.com/ValveSoftware/source-sdk-2013`
+### C# Bindings
+The C# solution `src/CSharp/Engine/Engine.sln` provides all the abstractions for interacting with Engine code from C#. Inside of the solution the imports are stored in `Bridge/` and often mirror the folder structure of the C++ bindings its importing. Bridge classes should ALWAYS be marked as `internal` to prevent users accessing the low level engine imports.
+
+## Build Instructions
+
+### Prerequisites
+ - Source SDK 2013 Multiplayer installed via Steam
+ - **Visual Studio 2022** (Windows) or compatible build tools (Linux)
+ - **Python 3.13** or later (Windows only)
+ - **.NET 9.0** for C# compilation
+ - **podman** (Linux only)
 
 ### Windows
 
-Requirements:
- - Source SDK 2013 Multiplayer installed via Steam
- - Visual Studio 2022 with the following workload and components:
-   - Desktop development with C++:
-     - MSVC v143 - VS 2022 C++ x64/x86 build tools (Latest)
-     - Windows 11 SDK (10.0.22621.0) or Windows 10 SDK (10.0.19041.1)
- - Python 3.13 or later
+1. Clone the repository:
 
-Inside the cloned directory, navigate to `src`, run:
-```bat
-createallprojects.bat
-```
-This will generate the Visual Studio project `everything.sln` which will be used to build your mod.
+    ```bat
+    git clone https://github.com/YourUsername/source-cs
+    ```
 
-Then, on the menu bar, go to `Build > Build Solution`, and wait for everything to build.
+2. Navigate to the `src` folder and run:
 
-You can then select the `Client (Mod Name)` project you wish to run, right click and select `Set as Startup Project` and hit the big green `> Local Windows Debugger` button on the tool bar in order to launch your mod.
+    ```bat
+    createallprojects.bat
+    ```
 
-The default launch options should be already filled in for the `Release` configuration.
+3. Open `everything.sln` in Visual Studio 2022.
+
+4. Build the solution via `Build > Build Solution`.
+
+5. Copy `nethost.dll` from `src/thirdparty/dotnet` to the `bin/x64` folder of the mod.
+
+6. Build both the `SourceEngine` and optionally `Game` C# Projects in `src/CSharp` and copy the outputs to the `bin/x64` folder of the mod.
+
+7. Set your mod project (e.g., `Client (HL2MP)`) as the startup project.
+
+8. Run with the debugger (`Local Windows Debugger`).
 
 ### Linux
+
+C# Has not been tested on Linux.
 
 Requirements:
  - Source SDK 2013 Multiplayer installed via Steam
