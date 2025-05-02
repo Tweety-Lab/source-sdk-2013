@@ -14,6 +14,9 @@ $include "$SRCDIR\game\shared\tf\tf_gcmessages_include.vpc"
 $include "$SRCDIR\game\shared\tf\tf_proto_def_messages_include.vpc"
 $Include "$SRCDIR\game\server\nav_mesh.vpc"
 
+// C#
+$Include "$SRCDIR\game\shared\csharp\csharp.vpc"
+
 $Configuration
 {
 	$Compiler
