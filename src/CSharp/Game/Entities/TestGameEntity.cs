@@ -8,6 +8,9 @@ namespace Game.Entities;
 [Entity("csharp_entity")]
 public class TestGameEntity : BaseEntity
 {
+    [ConVar("csharp_convar", ConVarFlag.None, "C# ConVar registered from Game")]
+    public static string TestConvar { get; set; } = "Test Convar";
+
     public override void Spawn()
     {
         Console.Msg("C# Entity Spawned.");

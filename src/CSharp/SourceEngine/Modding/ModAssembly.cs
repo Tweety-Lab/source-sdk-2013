@@ -57,6 +57,9 @@ namespace SourceEngine.Modding
                 Console.Msg($"Found Mod Entry Point: {Type.FullName}");
                 Mod = (IMod)Activator.CreateInstance(Type);
                 Mod.OnLoad();
+
+                // Process things like convars and entities
+                PreProccesor.PreProcessor.Process(this);
             }
             catch (Exception ex)
             {

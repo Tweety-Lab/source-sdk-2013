@@ -14,8 +14,6 @@ namespace SourceEngine
         {
             Console.Msg("Loading Game DLLs...");
 
-            Console.RegisterConVar("csharp_convar", "Default Value", 0, "A Console Variable created from C#.");
-
             // Search for Game.dll
             if (File.Exists(FileSystem.RelativePathToFullPath("Game.dll", PathID.GameBin)))
             {

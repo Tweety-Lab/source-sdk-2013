@@ -16,7 +16,6 @@ namespace Game
         public void OnLoad()
         {
             SourceEngine.Console.Msg("Game Loaded.");
-            EntitySystem.RegisterEntity("game_entity", typeof(TestGameEntity));
         }
     }
 }
