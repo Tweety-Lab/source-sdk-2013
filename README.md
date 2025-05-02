@@ -38,6 +38,7 @@ The C# solution `src/CSharp/SourceEngine/SourceEngine.sln` provides all the abst
 		CSharpScripting::RegisterCSharpEntityFactories();
 	}
 ```
+4. Add the lines `#include "scripting/CSharpScripting.h"` and `#include "scripting/dotnet/DotNetScriptingBackend.h"` near the top of `gameinterface.cpp`
 5. Follow the steps in **Build Instructions**
 6. Enjoy!
 
