@@ -17,7 +17,7 @@ C# Support adds a lot of new folders and files, each with their own conventions.
 Stored in `Client OR Server/Source Files/CSharp/Bridge/`. This is where all the C++ Code that gets called by C# is stored. Files made in here should be appended with "Exports" to make their function clear.
 
 ### C# Bindings
-The C# solution `src/CSharp/Engine/Engine.sln` provides all the abstractions for interacting with Engine code from C#. Inside of the solution the imports are stored in `Bridge/` and often mirror the folder structure of the C++ bindings its importing. Bridge classes should ALWAYS be marked as `internal` to prevent users accessing the low level engine imports.
+The C# solution `src/CSharp/SourceEngine/SourceEngine.sln` provides all the abstractions for interacting with Engine code from C#. Inside of the solution the imports are stored in `Bridge/` and often mirror the folder structure of the C++ bindings its importing. Bridge classes should ALWAYS be marked as `internal` to prevent users accessing the low level engine imports.
 
 ## Integrating C# Support in your own SDK
 1. Add the `src/CSharp` and `src/game/shared/csharp` folders to your SDK.
